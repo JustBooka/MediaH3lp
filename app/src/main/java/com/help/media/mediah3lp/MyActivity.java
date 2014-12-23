@@ -26,10 +26,9 @@ import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKAudioArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
 
 
 public class MyActivity extends ListActivity {
@@ -172,9 +171,12 @@ public class MyActivity extends ListActivity {
 
                 }
 
-//                ts.addAll(users);
-//                users.clear();
-//                users.addAll(ts);
+
+
+                ts.addAll(users);
+                users.clear();
+                users.addAll(ts);
+                Collections.sort(users, new Audio.AudioComparator());
                 listAdapter.notifyDataSetChanged();
             }
 
