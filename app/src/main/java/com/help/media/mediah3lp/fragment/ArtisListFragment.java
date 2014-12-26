@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.help.media.mediah3lp.ArtistActivity;
+import com.help.media.mediah3lp.ArtistCardActivity;
 import com.help.media.mediah3lp.Audio;
 import com.help.media.mediah3lp.R;
 import com.vk.sdk.VKAccessToken;
@@ -28,6 +32,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKAudioArray;
+import com.vk.sdk.dialogs.VKShareDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +42,7 @@ import java.util.List;
 /**
  * Created by alexey.bukin on 12.12.2014.
  */
-public class ArtisListFragment extends Fragment {
+public class ArtisListFragment extends ListFragment {
 
     private static final String VK_APP_ID = "4675654";
 
@@ -110,8 +115,7 @@ public class ArtisListFragment extends Fragment {
 
             }
         };
-        ListView list = (ListView) getView().findViewById(android.R.id.list);
-        list.setAdapter(listAdapter);
+        setListAdapter(listAdapter);
 
         VKSdk.initialize(sdkListener, VK_APP_ID);
 
@@ -131,6 +135,7 @@ public class ArtisListFragment extends Fragment {
             loginButton.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -207,6 +212,30 @@ public class ArtisListFragment extends Fragment {
                 Log.d("MediaHLPR", "onProgress " + progressType + " " + bytesLoaded + " " + bytesTotal);
             }
         });
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        final Audio user = listAdapter.getItem(position);
+
+        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
+        startActivity(intent);
+
+
+//        new VKShareDialog()
+//                .setText("Я слушаю" + user.getArtist())
+//                .setAttachmentLink("Отправлено из MediaHelper", "такие дела")
+//                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+//                    @Override
+//                    public void onVkShareComplete(int postId) {
+//                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onVkShareCancel() {
+//                    }
+//                }).show(getFragmentManager(), "VK_SHARE_DIALOG");
     }
 
 }

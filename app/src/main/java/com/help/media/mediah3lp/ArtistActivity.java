@@ -14,7 +14,7 @@ import android.widget.ListView;
 import com.vk.sdk.VKUIHelper;
 
 
-public class MyActivity extends ActionBarActivity {
+public class ArtistActivity extends ActionBarActivity {
 
     private ActionBarDrawerToggle toggle;
 
@@ -38,12 +38,14 @@ public class MyActivity extends ActionBarActivity {
         toggle.setDrawerIndicatorEnabled(true);
         drawerLayout.setDrawerListener(toggle);
 
-        lv_navigation_drawer.setAdapter(new ArrayAdapter<String>(
+        lv_navigation_drawer.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 new String[] {getString(R.string.menu1),
                         getString(R.string.menu2),
                         getString(R.string.menu3),}));
+
+        getSupportActionBar().setTitle(getString(R.string.menu1));
     }
 
     @Override
