@@ -1,9 +1,12 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -217,11 +221,25 @@ public class ArtisListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        final Audio user = listAdapter.getItem(position);
+        final Audio artist = listAdapter.getItem(position);
+        String name = (String) l.getItemAtPosition(position);
 
-        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
+       TextView tv = (TextView)getView().findViewById(R.id.artist_name);
+   //    tv.setText(user.getArtist());
+
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                ArtistCardActivity.class);
+        intent.putExtra("value", String.valueOf(name));
         startActivity(intent);
+//        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
+//        startActivity(intent);
 
+//       open new fragment
+//        ArtistCardFragment artFrag = new ArtistCardFragment();
+//        getFragmentManager().beginTransaction()
+//        .replace(R.id.container_resource, artFrag)
+//        .addToBackStack(null)
+//        .commit();
 
 //        new VKShareDialog()
 //                .setText("Я слушаю" + user.getArtist())
@@ -229,7 +247,7 @@ public class ArtisListFragment extends ListFragment {
 //                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
 //                    @Override
 //                    public void onVkShareComplete(int postId) {
-//                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
+////                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
 //                    }
 //
 //                    @Override
@@ -237,5 +255,7 @@ public class ArtisListFragment extends ListFragment {
 //                    }
 //                }).show(getFragmentManager(), "VK_SHARE_DIALOG");
     }
+
+
 
 }
