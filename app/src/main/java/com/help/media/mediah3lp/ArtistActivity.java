@@ -3,6 +3,8 @@ package com.help.media.mediah3lp;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,12 +13,15 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.help.media.mediah3lp.fragment.ArtisListFragment;
 import com.vk.sdk.VKUIHelper;
 
 
 public class ArtistActivity extends ActionBarActivity {
 
     private ActionBarDrawerToggle toggle;
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,15 @@ public class ArtistActivity extends ActionBarActivity {
                         getString(R.string.menu3),}));
 
         getSupportActionBar().setTitle(getString(R.string.menu1));
+
+        manager = getSupportFragmentManager();
+        initArtistListFragment();
+    }
+
+    private void initArtistListFragment() {
+        transaction = manager.beginTransaction();
+        transaction.add(R.id.container_resource, new ArtisListFragment());
+        transaction.commit();
     }
 
     @Override

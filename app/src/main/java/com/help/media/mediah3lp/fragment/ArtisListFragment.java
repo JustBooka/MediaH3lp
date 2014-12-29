@@ -1,17 +1,22 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
+import static android.widget.AdapterView.OnItemLongClickListener;
 
 /**
  * Created by alexey.bukin on 12.12.2014.
@@ -217,11 +224,23 @@ public class ArtisListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        final Audio user = listAdapter.getItem(position);
+        Object object = this.getListAdapter().getItem(position);
+        Audio user = (Audio) object;
+        String name = user.getArtist();
 
-        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                ArtistCardActivity.class);
+        intent.putExtra("value", String.valueOf(name));
         startActivity(intent);
+//        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
+//        startActivity(intent);
 
+//       open new fragment
+//        ArtistCardFragment artFrag = new ArtistCardFragment();
+//        getFragmentManager().beginTransaction()
+//        .replace(R.id.container_resource, artFrag)
+//        .addToBackStack(null)
+//        .commit();
 
 //        new VKShareDialog()
 //                .setText("Я слушаю" + user.getArtist())
@@ -229,7 +248,7 @@ public class ArtisListFragment extends ListFragment {
 //                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
 //                    @Override
 //                    public void onVkShareComplete(int postId) {
-//                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
+////                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
 //                    }
 //
 //                    @Override

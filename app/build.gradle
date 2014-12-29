@@ -24,4 +24,8 @@ dependencies {
     compile project(':vksdk_library')
     compile 'net.danlew:android.joda:2.4.0'
     compile 'com.android.support:appcompat-v7:21.0.+'
+    compile fileTree(dir: '../lib', include: '*jar')
+    compile files('libs/gson-2.3.1.jar')
+    compile files('libs/jsoup-1.8.1.jar')
+
 }

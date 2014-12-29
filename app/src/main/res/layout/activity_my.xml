@@ -18,7 +18,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/container"
+            android:id="@+id/container_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -29,11 +29,12 @@
             android:layout_gravity="start"
             android:background="@android:color/white" />
 
-        <fragment
-            android:id="@+id/artist_list_fragment"
-            android:name="com.help.media.mediah3lp.fragment.ArtisListFragment"
+        <FrameLayout
+            android:id="@+id/container_resource"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"/>
+
 
     </android.support.v4.widget.DrawerLayout>
 
