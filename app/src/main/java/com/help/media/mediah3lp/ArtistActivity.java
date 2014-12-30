@@ -22,6 +22,7 @@ public class ArtistActivity extends ActionBarActivity {
     private ActionBarDrawerToggle toggle;
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private ListView mDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +47,14 @@ public class ArtistActivity extends ActionBarActivity {
         lv_navigation_drawer.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                new String[] {getString(R.string.menu1),
-                        getString(R.string.menu2),
-                        getString(R.string.menu3),}));
+                new String[]{getString(R.string.menu1),}));
 
         getSupportActionBar().setTitle(getString(R.string.menu1));
 
         manager = getSupportFragmentManager();
         initArtistListFragment();
     }
+
 
     private void initArtistListFragment() {
         transaction = manager.beginTransaction();
@@ -87,4 +87,13 @@ public class ArtistActivity extends ActionBarActivity {
         toggle.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        System.exit(1);
+    }
 }

@@ -11,7 +11,9 @@
     <string name="empty">Нет данных</string>
     <string name="artist_info">Информация</string>
     <string name="artist_albums">Альбомы</string>
-
+    <string name="btn_info">Информация</string>
+    <string name="btn_albums">Альбомы</string>
+    <string name="btn_events">События</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -1,27 +1,19 @@
 package com.help.media.mediah3lp.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.help.media.mediah3lp.ArtistActivity;
 import com.help.media.mediah3lp.ArtistCardActivity;
 import com.help.media.mediah3lp.Audio;
 import com.help.media.mediah3lp.R;
@@ -37,14 +29,11 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKAudioArray;
-import com.vk.sdk.dialogs.VKShareDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
-import static android.widget.AdapterView.OnItemLongClickListener;
 
 /**
  * Created by alexey.bukin on 12.12.2014.
@@ -116,8 +105,6 @@ public class ArtisListFragment extends ListFragment {
                 final Audio audio = getItem(position);
 
                 ((TextView) view.findViewById(android.R.id.text1)).setText(audio.getArtist());
-
-//                ((TextView) view.findViewById(android.R.id.text2)).setText(audio.getGenre());
                 return view;
 
             }
@@ -170,7 +157,7 @@ public class ArtisListFragment extends ListFragment {
             currentRequest.cancel();
         }
 //        currentRequest = new com.vk.sdk.api.methods.VKApiAudio().get(VKParameters.from(VKApiConst.FIELDS, "artist,genre_id"));
-        currentRequest  = new VKRequest("audio.get", VKParameters.from(VKApiConst.FIELDS, "id,artist,genre_id"), VKRequest.HttpMethod.GET, VKAudioArray.class);
+        currentRequest = new VKRequest("audio.get", VKParameters.from(VKApiConst.FIELDS, "id,artist,genre_id"), VKRequest.HttpMethod.GET, VKAudioArray.class);
 
         //  currentRequest = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "id,first_name,last_name,bdate"));
         currentRequest.executeWithListener(new VKRequest.VKRequestListener() {
@@ -248,7 +235,7 @@ public class ArtisListFragment extends ListFragment {
 //                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
 //                    @Override
 //                    public void onVkShareComplete(int postId) {
-////                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
 //                    }
 //
 //                    @Override
