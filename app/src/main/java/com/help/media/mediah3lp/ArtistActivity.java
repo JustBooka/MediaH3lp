@@ -24,6 +24,7 @@ public class ArtistActivity extends ActionBarActivity {
     private FragmentTransaction transaction;
     private ListView mDrawerList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class ArtistActivity extends ActionBarActivity {
         lv_navigation_drawer.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                new String[]{getString(R.string.menu1),}));
+                new String[]{getString(R.string.menu1),getString(R.string.btn_events),}));
 
         getSupportActionBar().setTitle(getString(R.string.menu1));
 

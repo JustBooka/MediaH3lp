@@ -1,6 +1,7 @@
 package com.help.media.mediah3lp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,12 +16,18 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Just on 12/26/2014.
@@ -32,19 +39,28 @@ public class ArtistCardActivity extends Activity implements View.OnClickListener
 
     private URL link, link2;
     private WebView mWebView;
-    private TextView tv_info;
+    ProgressDialog pd = null;
+
+
+
+    protected void doParse() {
+        DownloadWebPageTask task = new DownloadWebPageTask();
+        task.execute(new String[] {String.valueOf(link2)});
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_info_layout);
         mWebView = (WebView) findViewById(R.id.artist_info);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String s = extras.getString("value");
             TextView view = (TextView) findViewById(R.id.artist_name);
             view.setText(s);
+
+            this.pd = ProgressDialog.show(this, "",
+                    getString(R.string.loading), true, false);
 
             try {
                 link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + s + "&api_key=" + API_KEY + "&format=json");
@@ -62,6 +78,7 @@ public class ArtistCardActivity extends Activity implements View.OnClickListener
         btn_events.setOnClickListener(this);
 
         new ParseTask().execute();
+        new DownloadWebPageTask().execute();
     }
 
     @Override
@@ -125,19 +142,67 @@ public class ArtistCardActivity extends Activity implements View.OnClickListener
 
             if (!TextUtils.isEmpty(strJson)) {
                 ArtistResponse info = new Gson().fromJson(strJson, ArtistResponse.class);
-                Toast.makeText(getApplicationContext(), R.string.loading, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), R.string.loading, Toast.LENGTH_LONG).show();
 //                mWebView.loadUrl(info.getArtist().getBio().getLinks().getLink().getHref());
-                mWebView.loadUrl(String.valueOf(link2));
+//                mWebView.loadUrl(String.valueOf(link2));
                 mWebView.setWebViewClient(new WebViewClient() {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         return true;
                     }
                 });
 
+                doParse();
             } else {
+                ArtistCardActivity.this.pd.dismiss();
                 Toast.makeText(getApplicationContext(), R.string.loading_error, Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
+        }
+    }
+
+    private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
+
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+                String response = "";
+                for (String url : urls) {
+                    DefaultHttpClient client = new DefaultHttpClient();
+                    HttpGet httpGet = new HttpGet(url);
+                    try {
+                        HttpResponse execute = client.execute(httpGet);
+                        InputStream content = execute.getEntity().getContent();
+
+                        BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                        String s = "";
+                        while ((s = buffer.readLine()) != null) {
+                            response += s;
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return response;
+            }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Pattern p = Pattern.compile("<div id=\"wiki\">(.*?)</div>");
+            Matcher m = p.matcher(result);
+//            if (ArtistCardActivity.this.pd != null) {
+//                ArtistCardActivity.this.pd.dismiss();
+//            }
+
+            if (m.find()) {
+
+                mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
+                ArtistCardActivity.this.pd.dismiss();
+
+            }
+
         }
     }
 }

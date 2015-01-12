@@ -11,6 +11,7 @@
         android:drawableLeft="@drawable/ic_ab_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_login"/>
+        android:text="@string/title_login"
+        android:gravity="center_horizontal|center_vertical"/>
 
 </LinearLayout>

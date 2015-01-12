@@ -3,14 +3,14 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="LOCAL" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="C:\android\android-studio\gradle\gradle-2.2.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MaterialTabsModule" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/jsoup-1.8.1" />
             <option value="$PROJECT_DIR$/lastfm-java-0.1.2" />
             <option value="$PROJECT_DIR$/vksdk_library" />
           </set>
