@@ -9,16 +9,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.help.media.mediah3lp.fragment.ArtisListFragment;
+import com.help.media.mediah3lp.fragment.FragmentText;
 import com.vk.sdk.VKUIHelper;
 
 
 public class ArtistActivity extends ActionBarActivity {
 
+    private static final String LOG_TAG = "TAG";
     private ActionBarDrawerToggle toggle;
     private FragmentManager manager;
     private FragmentTransaction transaction;
@@ -48,13 +53,45 @@ public class ArtistActivity extends ActionBarActivity {
         lv_navigation_drawer.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                new String[]{getString(R.string.menu1),getString(R.string.btn_events),}));
+                new String[]{getString(R.string.menu1),
+                        getString(R.string.menu2),
+                }));
+
 
         getSupportActionBar().setTitle(getString(R.string.menu1));
-
         manager = getSupportFragmentManager();
         initArtistListFragment();
+
+        lv_navigation_drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG_TAG, "itemClick: position = " + position + ", id = "
+                        + id);
+
+                switch (position) {
+                    case 0:
+                        manager = getSupportFragmentManager();
+                        transaction = manager.beginTransaction();
+                        transaction.replace(R.id.container_resource, new ArtisListFragment());
+                        transaction.commit();
+                        break;
+
+                    case 1:
+
+                        transaction = manager.beginTransaction();
+                        transaction.replace(R.id.container_resource, new FragmentText());
+                        transaction.commit();
+                        break;
+                }
+
+            }
+        });
     }
+
+
+
 
 
     private void initArtistListFragment() {

@@ -1,15 +1,14 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.help.media.mediah3lp.R;
 
@@ -27,17 +26,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by User on 12.01.2015.
+ * Created by alexey.bukin on 26.12.2014.
  */
-public class ArtistEventsFragment extends Fragment {
+public class ArtistAlbumsFragment extends android.support.v4.app.Fragment{
 
     public String s;
     private URL link;
-    private WeakReference<DownloadWebPageTask> asyncTaskWeakRef;
+    private WebView mWebView;
     ProgressDialog pd = null;
+    private WeakReference<DownloadWebPageTask> asyncTaskWeakRef;
 
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fr_artist_events, container, false);
+        View view = inflater.inflate(R.layout.fr_artist_album, container, false);
         return view;
     }
 
@@ -48,7 +49,7 @@ public class ArtistEventsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         s = getArguments().getString("artist");
         try {
-            link = new URL("http://www.lastfm.ru/music/" + s + "/+events");
+            link = new URL("http://www.lastfm.ru/music/" + s + "/+albums?order=date");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -80,10 +81,10 @@ public class ArtistEventsFragment extends Fragment {
 
     public class DownloadWebPageTask extends AsyncTask<String, Void, String> {
 
-        private WeakReference<ArtistEventsFragment> fragmentWeakRef;
+        private WeakReference<ArtistAlbumsFragment> fragmentWeakRef;
 
-        public DownloadWebPageTask(ArtistEventsFragment fragment) {
-            this.fragmentWeakRef = new WeakReference<ArtistEventsFragment>(fragment);
+        public DownloadWebPageTask(ArtistAlbumsFragment fragment) {
+            this.fragmentWeakRef = new WeakReference<ArtistAlbumsFragment>(fragment);
         }
 
         public DownloadWebPageTask() {
@@ -116,12 +117,12 @@ public class ArtistEventsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            Pattern p = Pattern.compile("<table class=\"eventsMedium\">(.*?)</table>");
+            Pattern p = Pattern.compile("<ul class=\"albums  r album-list album-list--compact\" nthchildren=\"1\">(.*?)</ul>");
             Matcher m = p.matcher(result);
 
             if (m.find()) {
 
-                WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_events);
+                WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_albums);
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
                 pd.dismiss();
             }

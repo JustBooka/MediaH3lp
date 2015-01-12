@@ -1,5 +1,6 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ public class ArtistInfoFragment extends Fragment {
     public static final String API_KEY = "fd81bf1ff00cb86975d831785b3606a9";
     private static final String LOG_TAG = "my_log";
     public String s;
+    ProgressDialog pd = null;
 
     private URL link, link2;
 //    public WebView mWebView =(WebView) getView().findViewById(R.id.artist_info) ;
@@ -47,25 +49,25 @@ public class ArtistInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_artist_info, container, false);
-        Bundle args = getArguments();
-        if (args != null) {
-            s = args.getString("artist");
-        }
         return view;
 
     }
 
-    @Override
-    public void onResume() {
+    public void parseWebPage() {
         super.onResume();
         DownloadWebPageTask task = new DownloadWebPageTask();
         task.execute(new String[]{String.valueOf(link2)});
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setRetainInstance(true);
-        startNewAsyncTask();
+
+//        Bundle args = getArguments();
+//        if (args != null) {
+//            s = args.getString("artist");
+//        }
 //        startDownloadWebPageTask();
 
 //        Bundle extras = getIntent().getExtras();
@@ -73,24 +75,32 @@ public class ArtistInfoFragment extends Fragment {
 //            String s = extras.getString("value");
 //            TextView view = (TextView) findViewById(R.id.artist_name);
 //            view.setText(s);
+        this.pd = ProgressDialog.show(this.getActivity(), "",
+                getString(R.string.loading), true, false);
 
+        s = getArguments().getString("artist");
         try {
             link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + s + "&api_key=" + API_KEY + "&format=json");
             link2 = new URL("http://www.lastfm.ru/music/" + s + "/+wiki");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        setRetainInstance(true);
+        startNewAsyncTask();
      super.onCreate(savedInstanceState);
     }
 
 //        new ParseTask().execute();
 //        new DownloadWebPageTask().execute();
 
-    private void startNewAsyncTask() {
+       private void startNewAsyncTask() {
         ParseTask asyncTask = new ParseTask(this);
         this.asyncTaskWeakRef = new WeakReference<ParseTask>(asyncTask);
         asyncTask.execute();
     }
+
+
 
 //    private void startDownloadWebPageTask() {
 //        DownloadWebPageTask asyncTask = new DownloadWebPageTask();
@@ -145,17 +155,19 @@ public class ArtistInfoFragment extends Fragment {
 
             if (!TextUtils.isEmpty(strJson)) {
                 ArtistResponse info = new Gson().fromJson(strJson, ArtistResponse.class);
-                Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_LONG).show();
 //                mWebView.loadUrl(info.getArtist().getBio().getLinks().getLink().getHref());
 //                mWebView.loadUrl(String.valueOf(link2));
-                WebView mWebView = (WebView) getView().findViewById(R.id.artist_info);
+                WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_info);
                 mWebView.setWebViewClient(new WebViewClient() {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         return true;
                     }
                 });
 
+                parseWebPage();
             } else {
+                pd.dismiss();
                 Toast.makeText(getActivity(), R.string.loading_error, Toast.LENGTH_SHORT).show();
                 getActivity().onBackPressed();
             }
@@ -188,7 +200,7 @@ public class ArtistInfoFragment extends Fragment {
                     InputStream content = execute.getEntity().getContent();
 
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                    String s = "";
+                    String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
                     }
@@ -207,8 +219,9 @@ public class ArtistInfoFragment extends Fragment {
             Matcher m = p.matcher(result);
 
             if (m.find()) {
-                WebView mWebView = (WebView) getView().findViewById(R.id.artist_info);
+                WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_info);
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
+                pd.dismiss();
             }
 
         }

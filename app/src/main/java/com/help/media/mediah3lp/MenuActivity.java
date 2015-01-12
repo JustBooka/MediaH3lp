@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.help.media.mediah3lp.fragment.ArtistAlbumsFragment;
 import com.help.media.mediah3lp.fragment.ArtistEventsFragment;
 import com.help.media.mediah3lp.fragment.ArtistInfoFragment;
 import com.help.media.mediah3lp.fragment.FragmentText;
@@ -39,8 +40,6 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
         setTitle(s);
         }
 
-        Bundle args = new Bundle();
-        args.putString("artist", s);
 
 
         Toolbar toolbar = (android.support.v7.widget.Toolbar) this.findViewById(R.id.toolbar);
@@ -73,7 +72,6 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
     }
 
-
     @Override
     public void onTabSelected(MaterialTab tab) {
         pager.setCurrentItem(tab.getPosition());
@@ -98,7 +96,7 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
         };
         Context context;
 
-        public ViewPagerAdapter(FragmentManager fm) {
+            public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
 
         }
@@ -110,17 +108,27 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
                 // Open FragmentTab1.java
                 case 0:
+                    Bundle args = new Bundle();
+                    args.putString("artist", s);
                     ArtistInfoFragment fragmentTab1 = new ArtistInfoFragment();
+                    fragmentTab1.setArguments(args);
                     return fragmentTab1;
 
                 // Open FragmentTab2.java
                 case 1:
+                    Bundle args2 = new Bundle();
+                    args2.putString("artist", s);
                     ArtistEventsFragment fragmentTab2 = new ArtistEventsFragment();
+                    fragmentTab2.setArguments(args2);
                     return fragmentTab2;
 
                 // Open FragmentTab3.java
                 case 2:
-                    return new FragmentText();
+                    Bundle args3 = new Bundle();
+                    args3.putString("artist", s);
+                    ArtistAlbumsFragment fragmentTab3 = new ArtistAlbumsFragment();
+                    fragmentTab3.setArguments(args3);
+                    return fragmentTab3;
             }
             return null;
         }

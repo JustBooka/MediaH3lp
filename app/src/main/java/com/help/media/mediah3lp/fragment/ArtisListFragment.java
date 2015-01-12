@@ -1,5 +1,6 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.help.media.mediah3lp.ArtistActivity;
 import com.help.media.mediah3lp.ArtistCardActivity;
 import com.help.media.mediah3lp.Audio;
+import com.help.media.mediah3lp.MenuActivity;
 import com.help.media.mediah3lp.R;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
@@ -41,6 +44,7 @@ import java.util.List;
 public class ArtisListFragment extends ListFragment {
 
     private static final String VK_APP_ID = "4675654";
+    ProgressDialog pd = null;
 
     //           currentRequest = new com.vk.sdk.api.methods.VKApiAudio().get(new VKParameters());
     private final VKSdkListener sdkListener = new VKSdkListener() {
@@ -90,6 +94,7 @@ public class ArtisListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.artist_list_layout, container, false);
+
     }
 
     @Override
@@ -152,6 +157,10 @@ public class ArtisListFragment extends ListFragment {
     }
 
     private void startLoading() {
+
+        this.pd = ProgressDialog.show(getActivity(), "",
+                getString(R.string.loading), true, false);
+
         loginButton.setVisibility(View.GONE);
         if (currentRequest != null) {
             currentRequest.cancel();
@@ -177,6 +186,7 @@ public class ArtisListFragment extends ListFragment {
 
                     }
                     listAdapter.add(new Audio(userFull.artist));
+                    pd.dismiss();
 
                 }
 
@@ -216,7 +226,7 @@ public class ArtisListFragment extends ListFragment {
         String name = user.getArtist();
 
         Intent intent = new Intent(getActivity().getApplicationContext(),
-                ArtistCardActivity.class);
+                MenuActivity.class);
         intent.putExtra("value", String.valueOf(name));
         startActivity(intent);
 //        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
