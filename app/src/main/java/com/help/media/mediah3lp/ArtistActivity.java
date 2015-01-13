@@ -12,12 +12,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.help.media.mediah3lp.fragment.ArtisListFragment;
+import com.help.media.mediah3lp.fragment.CityEventsFragment;
+import com.help.media.mediah3lp.fragment.CityFestivalsFragment;
 import com.help.media.mediah3lp.fragment.FragmentText;
+import com.help.media.mediah3lp.fragment.TopArtistsFragment;
 import com.vk.sdk.VKUIHelper;
 
 
@@ -27,7 +31,6 @@ public class ArtistActivity extends ActionBarActivity {
     private ActionBarDrawerToggle toggle;
     private FragmentManager manager;
     private FragmentTransaction transaction;
-    private ListView mDrawerList;
 
 
     @Override
@@ -40,7 +43,7 @@ public class ArtistActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         ListView lv_navigation_drawer = (ListView) findViewById(R.id.lv_navigation_drawer);
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         toggle = new ActionBarDrawerToggle(
                 this,
@@ -55,6 +58,8 @@ public class ArtistActivity extends ActionBarActivity {
                 android.R.layout.simple_list_item_1,
                 new String[]{getString(R.string.menu1),
                         getString(R.string.menu2),
+//                        getString(R.string.menu3),
+                        getString(R.string.menu4)
                 }));
 
 
@@ -64,27 +69,38 @@ public class ArtistActivity extends ActionBarActivity {
 
         lv_navigation_drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(LOG_TAG, "itemClick: position = " + position + ", id = "
                         + id);
-
-                switch (position) {
-                    case 0:
-                        manager = getSupportFragmentManager();
-                        transaction = manager.beginTransaction();
-                        transaction.replace(R.id.container_resource, new ArtisListFragment());
-                        transaction.commit();
-                        break;
-
-                    case 1:
-
-                        transaction = manager.beginTransaction();
-                        transaction.replace(R.id.container_resource, new FragmentText());
-                        transaction.commit();
-                        break;
+                if (position == 0) {
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container_resource, new ArtisListFragment());
+                    transaction.commit();
+                    drawerLayout.closeDrawers();
+                    getSupportActionBar().setTitle(getString(R.string.menu1));
                 }
+                else if (position == 1){
+                    transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container_resource, new CityEventsFragment());
+                    transaction.commit();
+                    drawerLayout.closeDrawers();
+                    getSupportActionBar().setTitle(getString(R.string.menu2));
+                }
+//                else if (position == 2){
+//                    transaction = getSupportFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.container_resource, new CityFestivalsFragment());
+//                    transaction.commit();
+//                    drawerLayout.closeDrawers();
+//                    getSupportActionBar().setTitle(getString(R.string.menu3));
+//                }
+                else if (position == 2){
+                transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container_resource, new TopArtistsFragment());
+                transaction.commit();
+                drawerLayout.closeDrawers();
+                getSupportActionBar().setTitle(getString(R.string.menu4));
+            }
 
             }
         });
@@ -125,13 +141,4 @@ public class ArtistActivity extends ActionBarActivity {
         toggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-        System.exit(1);
-    }
 }

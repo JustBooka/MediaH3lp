@@ -8,11 +8,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-
 import com.help.media.mediah3lp.fragment.ArtistAlbumsFragment;
 import com.help.media.mediah3lp.fragment.ArtistEventsFragment;
 import com.help.media.mediah3lp.fragment.ArtistInfoFragment;
-import com.help.media.mediah3lp.fragment.FragmentText;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -36,17 +34,16 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-        s = extras.getString("value");
-        setTitle(s);
+            s = extras.getString("value");
+            setTitle(s);
         }
-
 
 
         Toolbar toolbar = (android.support.v7.widget.Toolbar) this.findViewById(R.id.toolbar);
         this.setSupportActionBar(toolbar);
 
         tabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
-        pager = (ViewPager) this.findViewById(R.id.pager );
+        pager = (ViewPager) this.findViewById(R.id.pager);
 
         // init view pager
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -89,14 +86,14 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
         final int PAGE_COUNT = 3;
-        private String tabTitles[] = new String[] {
+        private String tabTitles[] = new String[]{
                 getString(R.string.btn_info),
                 getString(R.string.btn_events),
                 getString(R.string.btn_albums)
         };
         Context context;
 
-            public ViewPagerAdapter(FragmentManager fm) {
+        public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
 
         }

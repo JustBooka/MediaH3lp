@@ -1,11 +1,11 @@
 package com.help.media.mediah3lp.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,31 +27,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by alexey.bukin on 26.12.2014.
+ * Created by alexey.bukin on 13.01.2015.
  */
-public class ArtistAlbumsFragment extends android.support.v4.app.Fragment{
+public class CityFestivalsFragment extends Fragment {
 
-    public String s;
     private URL link;
     ProgressDialog pd = null;
     private WeakReference<DownloadWebPageTask> asyncTaskWeakRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fr_artist_album, container, false);
+        View view = inflater.inflate(R.layout.fr_city_events, container, false);
         return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        s = getArguments().getString("artist");
+//        s = getArguments().getString("artist");
         try {
-            link = new URL("http://www.lastfm.ru/music/" + s + "/+albums?order=date");
+            link = new URL("http://www.lastfm.ru/festivals/+place/Russian+Federation/Санкт-Петербург");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         setRetainInstance(true);
         startNewAsyncTask();
     }
@@ -72,10 +70,10 @@ public class ArtistAlbumsFragment extends android.support.v4.app.Fragment{
 
     public class DownloadWebPageTask extends AsyncTask<String, Void, String> {
 
-        private WeakReference<ArtistAlbumsFragment> fragmentWeakRef;
+        private WeakReference<CityFestivalsFragment> fragmentWeakRef;
 
-        public DownloadWebPageTask(ArtistAlbumsFragment fragment) {
-            this.fragmentWeakRef = new WeakReference<ArtistAlbumsFragment>(fragment);
+        public DownloadWebPageTask(CityFestivalsFragment fragment) {
+            this.fragmentWeakRef = new WeakReference<CityFestivalsFragment>(fragment);
         }
 
         public DownloadWebPageTask() {
@@ -111,12 +109,13 @@ public class ArtistAlbumsFragment extends android.support.v4.app.Fragment{
             if(isDetached()){
                 return;
             }
-            Pattern p = Pattern.compile("<ul class=\"albums  r album-list album-list--compact\" nthchildren=\"1\">(.*?)</ul>");
+
+            Pattern p = Pattern.compile("<table id=\"festivalResults\" noattendance=\"1\">(.*?)</table>");
             Matcher m = p.matcher(result);
 
             if (m.find()) {
 
-                WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_albums);
+                WebView mWebView = (WebView) getView().findViewById(R.id.wv_city_festivals);
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
                 pd.dismiss();
             }

@@ -18,9 +18,10 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/container_menu"
+            android:id="@+id/container_resource"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"/>
 
         <ListView
             android:id="@+id/lv_navigation_drawer"
@@ -28,16 +29,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@android:color/white"
-            android:clickable="true"
             android:choiceMode="singleChoice"
             style="@style/Base.TextAppearance.AppCompat.Menu"/>
-
-        <FrameLayout
-            android:id="@+id/container_resource"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
 
     </android.support.v4.widget.DrawerLayout>
 

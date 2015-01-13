@@ -100,7 +100,6 @@ public class ArtisListFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         listAdapter = new ArrayAdapter<Audio>(this.getActivity(), android.R.layout.simple_list_item_2, android.R.id.text1, users) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {

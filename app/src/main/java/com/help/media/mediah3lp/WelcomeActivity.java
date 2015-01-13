@@ -74,14 +74,6 @@ public class WelcomeActivity extends Activity{
                 VKSdk.authorize(VKScope.AUDIO);
             }
         });
-
-        if (VKSdk.wakeUpSession()) {
-            Intent intent = new Intent(this, ArtistActivity.class);
-            startActivity(intent);
-        } else {
-            loginButton.setVisibility(View.VISIBLE);
-        }
-
     }
 
     @Override
