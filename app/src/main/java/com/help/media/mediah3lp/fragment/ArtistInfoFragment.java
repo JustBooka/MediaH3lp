@@ -63,18 +63,6 @@ public class ArtistInfoFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            s = args.getString("artist");
-//        }
-//        startDownloadWebPageTask();
-
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            String s = extras.getString("value");
-//            TextView view = (TextView) findViewById(R.id.artist_name);
-//            view.setText(s);
         this.pd = ProgressDialog.show(this.getActivity(), "",
                 getString(R.string.loading), true, false);
 
@@ -91,22 +79,11 @@ public class ArtistInfoFragment extends Fragment {
      super.onCreate(savedInstanceState);
     }
 
-//        new ParseTask().execute();
-//        new DownloadWebPageTask().execute();
-
        private void startNewAsyncTask() {
         ParseTask asyncTask = new ParseTask(this);
         this.asyncTaskWeakRef = new WeakReference<ParseTask>(asyncTask);
         asyncTask.execute();
     }
-
-
-
-//    private void startDownloadWebPageTask() {
-//        DownloadWebPageTask asyncTask = new DownloadWebPageTask();
-//        this.asyncTaskWeakRef2 = new WeakReference<DownloadWebPageTask>(asyncTask);
-//        asyncTask.execute();
-//    }
 
 
     public class ParseTask extends AsyncTask<Void, Void, String> {
@@ -155,9 +132,6 @@ public class ArtistInfoFragment extends Fragment {
 
             if (!TextUtils.isEmpty(strJson)) {
                 ArtistResponse info = new Gson().fromJson(strJson, ArtistResponse.class);
-//                Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_LONG).show();
-//                mWebView.loadUrl(info.getArtist().getBio().getLinks().getLink().getHref());
-//                mWebView.loadUrl(String.valueOf(link2));
                 WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_info);
                 mWebView.setWebViewClient(new WebViewClient() {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -223,6 +197,7 @@ public class ArtistInfoFragment extends Fragment {
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
                 pd.dismiss();
             }
+
 
         }
     }
