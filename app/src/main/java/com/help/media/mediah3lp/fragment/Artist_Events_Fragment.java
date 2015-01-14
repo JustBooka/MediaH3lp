@@ -2,32 +2,55 @@ package com.help.media.mediah3lp.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Adapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.help.media.mediah3lp.ArtistResponse;
 import com.help.media.mediah3lp.R;
+import com.help.media.mediah3lp.models.artist.events.Event;
+import com.help.media.mediah3lp.models.artist.events.EventsResponse;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,12 +62,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class Artist_Events_Fragment extends Fragment {
 
+    private ListView mListView;
+    public String line;
     public String s;
     private URL link;
-    ProgressDialog pd = null;
+    private WeakReference<ParseTask> asyncTaskWeakRef;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_events, container, false);
+
+        mListView = (ListView) view.findViewById(R.id.list);
         return view;
     }
 
@@ -54,62 +81,164 @@ public class Artist_Events_Fragment extends Fragment {
         s = getArguments().getString("artist");
         try {
             try {
-                link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getevents&artist=" + URLEncoder.encode(s, "UTF-8") + "&api_key=fd81bf1ff00cb86975d831785b3606a9");
+                link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getevents&artist=" + URLEncoder.encode(s, "UTF-8") + "&api_key=fd81bf1ff00cb86975d831785b3606a9&format=json");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         try {
             start();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        setRetainInstance(true);
+        startNewAsyncTask();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.pd = ProgressDialog.show(this.getActivity(), "",
-                getString(R.string.loading), true, false);
+    private void startNewAsyncTask() {
+        ParseTask asyncTask = new ParseTask(this);
+        this.asyncTaskWeakRef = new WeakReference<ParseTask>(asyncTask);
+        asyncTask.execute();
     }
 
-    public void start() throws Exception {
+
+    public String start() throws Exception {
         URLConnection connection = link.openConnection();
+        BufferedReader bufferedReader =
+                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        if ((line = bufferedReader.readLine()) != null) {
+            return line;
+        }
+        return null;
+    }
 
-        Document doc = parseXML(connection.getInputStream());
-        NodeList descNodes = doc.getElementsByTagName("artist");
-        int i;
-        for(i = 0; i<descNodes.getLength();i++);
+    public class ParseTask extends AsyncTask<Void, Void, String> {
 
-        {
-            System.out.println(descNodes.item(i).getTextContent());
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String resultJson = "";
+
+        private WeakReference<Artist_Events_Fragment> fragmentWeakRef;
+
+        public ParseTask(Artist_Events_Fragment fragment) {
+            this.fragmentWeakRef = new WeakReference<Artist_Events_Fragment>(fragment);
+        }
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                URL url = link;
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuilder buffer = new StringBuilder();
+
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                resultJson = buffer.toString();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultJson;
+        }
+
+        @Override
+        protected void onPostExecute(String strJson) {
+            super.onPostExecute(strJson);
+
+            if (!TextUtils.isEmpty(strJson)) {
+                EventsResponse title = new Gson().fromJson(strJson, EventsResponse.class);
+
+                 mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getActivity()));
+
+
+
+            } else {
+                Toast.makeText(getActivity(), R.string.loading_error, Toast.LENGTH_SHORT).show();
+//                getActivity().onBackPressed();
+            }
         }
     }
 
-    private Document parseXML(InputStream stream)
-            throws Exception
-    {
-        DocumentBuilderFactory objDocumentBuilderFactory = null;
-        DocumentBuilder objDocumentBuilder = null;
-        Document doc = null;
-        try
-        {
-            objDocumentBuilderFactory = DocumentBuilderFactory.newInstance();
-            objDocumentBuilder = objDocumentBuilderFactory.newDocumentBuilder();
+    private static class MyAdapter extends BaseAdapter {
 
-            doc = objDocumentBuilder.parse(stream);
-        }
-        catch(Exception ex)
-        {
-            throw ex;
+        private List<Event> mList;
+        private Context mContext;
+
+        private MyAdapter(List<Event> list, Context context) {
+            mList = list;
+            mContext = context;
         }
 
-        return doc;
+        @Override
+        public int getCount() {
+            return mList.size();
+        }
+
+        @Override
+        public Event getItem(int position) {
+            return mList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            if (view == null) {
+                view = View.inflate(mContext, R.layout.item_event, null);
+            }
+
+            ViewHolder vh = (ViewHolder) view.getTag();
+            if (vh == null) {
+                vh = new ViewHolder();
+                vh.mTitle = (TextView) view.findViewById(R.id.title);
+                vh.mImage = (ImageView) view.findViewById(R.id.image);
+                vh.mCountry = (TextView) view.findViewById(R.id.country);
+                vh.mCity = (TextView) view.findViewById(R.id.city);
+                vh.mClub = (TextView) view.findViewById(R.id.name);
+                vh.mDate = (TextView) view.findViewById(R.id.startDate);
+
+                view.setTag(vh);
+            }
+
+            Event event = getItem(position);
+            vh.mTitle.setText(event.getTitle());
+            vh.mCountry.setText(event.getVenue().getLocation().getCountry() + ", ");
+            vh.mCity.setText(event.getVenue().getLocation().getCity());
+            vh.mClub.setText(event.getVenue().getName());
+            vh.mDate.setText(event.getStartDate());
+
+            if (event.getImage().size() >= 3) {
+                String imageSrc = event.getImage().get(4).getImgText();
+                Picasso.with(mContext).load(imageSrc).into(vh.mImage);
+            }
+
+            return view;
+        }
+
+        private static class ViewHolder {
+            private TextView mTitle;
+            private ImageView mImage;
+            private TextView mCountry;
+            private TextView mCity;
+            private TextView mClub;
+            private TextView mDate;
+        }
     }
-
-
 }

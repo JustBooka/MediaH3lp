@@ -143,7 +143,7 @@ public class ArtistCardActivity extends Activity implements View.OnClickListener
             if (!TextUtils.isEmpty(strJson)) {
                 ArtistResponse info = new Gson().fromJson(strJson, ArtistResponse.class);
 //                Toast.makeText(getApplicationContext(), R.string.loading, Toast.LENGTH_LONG).show();
-//                mWebView.loadUrl(info.getArtist().getBio().getLinks().getLink().getHref());
+                mWebView.loadUrl(info.getArtist().getBio().getLinks().getLink().getHref());
 //                mWebView.loadUrl(String.valueOf(link2));
                 mWebView.setWebViewClient(new WebViewClient() {
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {

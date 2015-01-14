@@ -1,7 +1,6 @@
 package com.help.media.mediah3lp.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;

@@ -228,6 +228,7 @@ public class ArtisListFragment extends ListFragment {
                 MenuActivity.class);
         intent.putExtra("value", String.valueOf(name));
         startActivity(intent);
+
 //        Intent intent = new Intent(this.getActivity(), ArtistCardActivity.class);
 //        startActivity(intent);
 
