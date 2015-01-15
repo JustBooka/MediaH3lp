@@ -1,9 +1,7 @@
 package com.help.media.mediah3lp.fragment;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,34 +10,20 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.help.media.mediah3lp.ArtistResponse;
+import com.help.media.mediah3lp.EventActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -49,13 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Created by alexey.bukin on 13.01.2015.
@@ -67,6 +45,7 @@ public class Artist_Events_Fragment extends Fragment {
     public String s;
     private URL link;
     private WeakReference<ParseTask> asyncTaskWeakRef;
+    Object object;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_events, container, false);
@@ -113,6 +92,16 @@ public class Artist_Events_Fragment extends Fragment {
             return line;
         }
         return null;
+    }
+
+    private void ItemClick() {
+        Event artist = (Event) object;
+        String name = artist.getId();
+
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                EventActivity.class);
+        intent.putExtra("value", String.valueOf(name));
+        startActivity(intent);
     }
 
     public class ParseTask extends AsyncTask<Void, Void, String> {
@@ -164,18 +153,20 @@ public class Artist_Events_Fragment extends Fragment {
 
                  mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getActivity()));
 
-
-
-            } else {
-                Toast.makeText(getActivity(), R.string.loading_error, Toast.LENGTH_SHORT).show();
-//                getActivity().onBackPressed();
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        object = MyAdapter.getItemList(position);
+                        ItemClick();
+                    }
+                });
             }
         }
     }
 
     private static class MyAdapter extends BaseAdapter {
 
-        private List<Event> mList;
+        private static List<Event> mList;
         private Context mContext;
 
         private MyAdapter(List<Event> list, Context context) {
@@ -189,7 +180,11 @@ public class Artist_Events_Fragment extends Fragment {
         }
 
         @Override
-        public Event getItem(int position) {
+        public  Event getItem(int position) {
+            return mList.get(position);
+        }
+
+        public static Event getItemList(int position) {
             return mList.get(position);
         }
 
@@ -225,7 +220,7 @@ public class Artist_Events_Fragment extends Fragment {
             vh.mDate.setText(event.getStartDate());
 
             if (event.getImage().size() >= 3) {
-                String imageSrc = event.getImage().get(4).getImgText();
+                String imageSrc = event.getImage().get(3).getImgText();
                 Picasso.with(mContext).load(imageSrc).into(vh.mImage);
             }
 

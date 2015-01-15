@@ -1,7 +1,6 @@
 package com.help.media.mediah3lp.models.artist.events;
 
 import com.google.gson.annotations.SerializedName;
-import com.help.media.mediah3lp.Bio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,4 +16,5 @@ public class Events {
     public List<Event> getEvent() {
         return mEvent;
     }
+
 }

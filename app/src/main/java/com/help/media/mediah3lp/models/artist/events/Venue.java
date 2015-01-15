@@ -14,4 +14,12 @@ public class Venue {
     private String name;
     public String getName() {return name;}
 
+    @SerializedName("phonenumber")
+    private String phonenumber;
+    public String getPhonenumber() {return phonenumber;}
+
+    @SerializedName("website")
+    private String website;
+    public String getWebsite() {return website;}
+
 }

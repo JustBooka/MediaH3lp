@@ -4,9 +4,8 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/wv_city_events"
+    <ListView
+        android:id="@+id/lv_city_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

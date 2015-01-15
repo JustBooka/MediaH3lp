@@ -9,8 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.help.media.mediah3lp.fragment.ArtistAlbumsFragment;
 import com.help.media.mediah3lp.fragment.ArtistInfoFragment;
+import com.help.media.mediah3lp.fragment.Artist_Albums_Fragment;
 import com.help.media.mediah3lp.fragment.Artist_Events_Fragment;
 
 import it.neokree.materialtabs.MaterialTab;
@@ -124,7 +124,7 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
                 case 2:
                     Bundle args3 = new Bundle();
                     args3.putString("artist", s);
-                    ArtistAlbumsFragment fragmentTab3 = new ArtistAlbumsFragment();
+                    Artist_Albums_Fragment fragmentTab3 = new Artist_Albums_Fragment();
                     fragmentTab3.setArguments(args3);
                     return fragmentTab3;
             }

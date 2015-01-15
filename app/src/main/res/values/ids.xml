@@ -3,4 +3,5 @@
     <item name="login_button" type="id" />
     <item name="artist_card_fragment" type="id" />
     <item name="scroll" type="id"/>
+    <item name="top_srtist_list" type="id" />
 </resources>

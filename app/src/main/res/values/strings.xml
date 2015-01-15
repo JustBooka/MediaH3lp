@@ -8,19 +8,20 @@
     <string name="menu1">Исполнители</string>
     <string name="menu2">Концерты</string>
     <string name="menu3">Фестивали</string>
-    <string name="menu4">Top-20 Исполнителей</string>
+    <string name="menu4">Chart</string>
     <string name="empty">Нет данных</string>
     <string name="artist_info">Информация</string>
     <string name="artist_albums">Альбом</string>
     <string name="btn_info">Информация</string>
     <string name="btn_albums">Альбомы</string>
     <string name="btn_events">События</string>
+    <string name="action_search">Поиск</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="msg_send">Запись опубликована</string>
     <string name="loading">Идёт загрузка...</string>
     <string name="loading_error">Информация об исполнителе отсутствует</string>
-    <string name="info_about">Информация об исполнителе:</string>
 
 </resources>

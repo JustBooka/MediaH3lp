@@ -5,22 +5,22 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.help.media.mediah3lp.fragment.ArtisListFragment;
 import com.help.media.mediah3lp.fragment.CityEventsFragment;
-import com.help.media.mediah3lp.fragment.CityFestivalsFragment;
-import com.help.media.mediah3lp.fragment.FragmentText;
 import com.help.media.mediah3lp.fragment.TopArtistsFragment;
 import com.vk.sdk.VKUIHelper;
 
@@ -106,6 +106,16 @@ public class ArtistActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        getMenuInflater().inflate(R.menu.action_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
 
 

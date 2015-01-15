@@ -1,7 +1,6 @@
 package com.help.media.mediah3lp.models.artist.events;
 
 import com.google.gson.annotations.SerializedName;
-import com.help.media.mediah3lp.Artist;
 
 /**
  * Created by alexey.bukin on 14.01.2015.
