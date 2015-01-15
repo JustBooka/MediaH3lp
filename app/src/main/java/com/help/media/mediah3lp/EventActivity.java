@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.help.media.mediah3lp.models.artist.event.EventResponse;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;
 import com.squareup.picasso.Picasso;
@@ -21,9 +22,11 @@ import com.squareup.picasso.Picasso;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -49,8 +52,10 @@ public class EventActivity  extends Activity{
             setTitle(s);
 
             try {
-                link = new URL("http://ws.audioscrobbler.com/2.0/?method=event.getinfo&event=" + s + "&api_key=" + API_KEY + "&format=json");
+                link = new URL("http://ws.audioscrobbler.com/2.0/?method=event.getinfo&event=" + URLEncoder.encode(s, "UTF-8") + "&api_key=" + API_KEY + "&format=json");
             } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
 //            getActionBar().setTitle(s);
@@ -111,7 +116,6 @@ public class EventActivity  extends Activity{
 
         private List<Event> mList;
         private Context mContext;
-
         private MyAdapter(List<Event> list, Context context) {
             mList = list;
             mContext = context;
@@ -135,21 +139,21 @@ public class EventActivity  extends Activity{
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null) {
-                view = View.inflate(mContext, R.layout.event, null);
+                view = View.inflate(mContext, R.layout.artist_event, null);
             }
 
             ViewHolder vh = (ViewHolder) view.getTag();
             if (vh == null) {
                 vh = new ViewHolder();
-                vh.mTitle = (TextView) view.findViewById(R.id.title);
-                vh.mImage = (ImageView) view.findViewById(R.id.image);
-                vh.mCountry = (TextView) view.findViewById(R.id.country);
-                vh.mCity = (TextView) view.findViewById(R.id.city);
-                vh.mClub = (TextView) view.findViewById(R.id.name);
-                vh.mDate = (TextView) view.findViewById(R.id.startDate);
-                vh.mPhoneNumber = (TextView) view.findViewById(R.id.phonenumber);
-                vh.mWebSite = (TextView) view.findViewById(R.id.tv_website);
-                vh.mStreet = (TextView) view.findViewById(R.id.street);
+                vh.mTitle = (TextView) view.findViewById(R.id.tv_title);
+                vh.mImage = (ImageView) view.findViewById(R.id.iv_event);
+                vh.mCountry = (TextView) view.findViewById(R.id.tv_country);
+                vh.mCity = (TextView) view.findViewById(R.id.tv_city);
+                vh.mClub = (TextView) view.findViewById(R.id.tv_name);
+                vh.mDate = (TextView) view.findViewById(R.id.tv_startDate);
+                vh.mPhoneNumber = (TextView) view.findViewById(R.id.tv_phonenumber);
+//                vh.mWebSite = (TextView) view.findViewById(R.id.tv_website);
+                vh.mStreet = (TextView) view.findViewById(R.id.tv_street);
 
                 view.setTag(vh);
             }
@@ -161,7 +165,7 @@ public class EventActivity  extends Activity{
             vh.mClub.setText(event.getVenue().getName());
             vh.mDate.setText(event.getStartDate());
             vh.mPhoneNumber.setText(event.getVenue().getPhonenumber());
-            vh.mWebSite.setText(event.getWebSite());
+//            vh.mWebSite.setText(event.getWebSite());
             vh.mStreet.setText(event.getVenue().getLocation().getStreet());
 
             if (event.getImage().size() >= 3) {

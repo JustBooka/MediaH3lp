@@ -25,7 +25,7 @@ import com.help.media.mediah3lp.fragment.TopArtistsFragment;
 import com.vk.sdk.VKUIHelper;
 
 
-public class ArtistActivity extends ActionBarActivity {
+public class ArtistActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = "TAG";
     private ActionBarDrawerToggle toggle;
@@ -111,7 +111,9 @@ public class ArtistActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.action_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setOnQueryTextListener(this);
+        onSearchRequested();
 
 
         return super.onCreateOptionsMenu(menu);
@@ -151,4 +153,13 @@ public class ArtistActivity extends ActionBarActivity {
         toggle.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
 }

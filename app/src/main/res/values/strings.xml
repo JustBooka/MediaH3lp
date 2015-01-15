@@ -23,5 +23,6 @@
     <string name="msg_send">Запись опубликована</string>
     <string name="loading">Идёт загрузка...</string>
     <string name="loading_error">Информация об исполнителе отсутствует</string>
+    <string name="text">search</string>
 
 </resources>

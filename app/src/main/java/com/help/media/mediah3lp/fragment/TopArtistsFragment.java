@@ -1,7 +1,11 @@
 package com.help.media.mediah3lp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,14 +29,18 @@ import com.help.media.mediah3lp.models.topartist.TopArtistResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+
+import static android.graphics.BitmapFactory.decodeFile;
 
 /**
  * Created by alexey.bukin on 13.01.2015.
@@ -43,6 +52,7 @@ public class TopArtistsFragment extends Fragment {
     private URL link;
     private WeakReference<ParseTask> asyncTaskWeakRef;
     Object object;
+    ProgressDialog pd = null;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_top_artists, container, false);
@@ -54,6 +64,9 @@ public class TopArtistsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.pd = ProgressDialog.show(this.getActivity(), "",
+                getString(R.string.loading), true, false);
+
         try {
             link = new URL("http://ws.audioscrobbler.com/2.0/?method=geo.getmetroartistchart&country=russia&metro=saint%20petersburg&api_key=fd81bf1ff00cb86975d831785b3606a9&format=json");
         } catch (MalformedURLException e) {
@@ -139,6 +152,7 @@ public class TopArtistsFragment extends Fragment {
         @Override
         protected void onPostExecute(String strJson) {
             super.onPostExecute(strJson);
+            pd.dismiss();
 
             if (!TextUtils.isEmpty(strJson)) {
                 TopArtistResponse title = new Gson().fromJson(strJson, TopArtistResponse.class);
@@ -206,12 +220,16 @@ public class TopArtistsFragment extends Fragment {
             if (topArtist.getImage().size() >= 3) {
                 String imageSrc = topArtist.getImage().get(3).getImgText();
                 Picasso.with(mContext).load(imageSrc).into(vh.mImage);
+
+
             }
 
             return view;
         }
 
-        private static class ViewHolder {
+
+
+        private  class ViewHolder {
             private TextView mTitle;
             private ImageView mImage;
         }

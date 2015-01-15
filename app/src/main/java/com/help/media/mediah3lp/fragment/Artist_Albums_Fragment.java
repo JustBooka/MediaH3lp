@@ -9,16 +9,22 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.help.media.mediah3lp.Audio;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.albums.Album;
+import com.help.media.mediah3lp.models.artist.albums.Albums;
 import com.help.media.mediah3lp.models.artist.albums.AlbumsResponse;
+import com.help.media.mediah3lp.models.topartist.Artist;
 import com.squareup.picasso.Picasso;
+import com.vk.sdk.dialogs.VKShareDialog;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -42,6 +48,7 @@ public class Artist_Albums_Fragment extends Fragment {
     public String s;
     private URL link;
     private WeakReference<ParseTask> asyncTaskWeakRef;
+    Object object;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_albums, container, false);
@@ -139,12 +146,39 @@ public class Artist_Albums_Fragment extends Fragment {
 
                 mListView.setAdapter(new MyAdapter(albums.getTopAlbums().getAlbum(), getActivity()));
             }
+
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    object = MyAdapter.getItemList(position);
+                    ItemClick();
+                }
+            });
         }
+    }
+
+    private void ItemClick() {
+        Album album = (Album) object;
+//        String name = user.getArtist();
+
+        new VKShareDialog()
+                .setText("Я слушаю" + album.getName())
+                .setAttachmentLink("Отправлено из MediaHelper", "такие дела")
+                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+                    @Override
+                    public void onVkShareComplete(int postId) {
+                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onVkShareCancel() {
+                    }
+                }).show(getFragmentManager(), "VK_SHARE_DIALOG");
     }
 
     private static class MyAdapter extends BaseAdapter {
 
-        private List<Album> mList;
+        private static List<Album> mList;
         private Context mContext;
 
         private MyAdapter(List<Album> list, Context context) {
@@ -159,6 +193,10 @@ public class Artist_Albums_Fragment extends Fragment {
 
         @Override
         public Album getItem(int position) {
+            return mList.get(position);
+        }
+
+        public static Album getItemList(int position) {
             return mList.get(position);
         }
 
@@ -187,7 +225,7 @@ public class Artist_Albums_Fragment extends Fragment {
             vh_albums.mArtist.setText(album.getmArtist().getName());
 
             if (album.getImage().size() >= 3) {
-                String imageSrc = album.getImage().get(2).getImgText();
+                String imageSrc = album.getImage().get(3).getImgText();
                 Picasso.with(mContext).load(imageSrc).into(vh_albums.mImage);
             }
 

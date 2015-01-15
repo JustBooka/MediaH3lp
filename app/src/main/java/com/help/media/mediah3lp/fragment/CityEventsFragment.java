@@ -21,16 +21,21 @@ import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Request;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.List;
+
+import javax.security.auth.callback.Callback;
 
 /**
  * Created by alexey.bukin on 13.01.2015.
@@ -54,8 +59,10 @@ public class CityEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            link = new URL("http://ws.audioscrobbler.com/2.0/?method=geo.getevents&location=Sankt-Peterburg&api_key=fd81bf1ff00cb86975d831785b3606a9&format=json");
+            link = new URL("http://ws.audioscrobbler.com/2.0/?method=geo.getevents&location=" + URLEncoder.encode("Saint Petersburg", "UTF-8")+ "&api_key=fd81bf1ff00cb86975d831785b3606a9&format=json");
         } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         try {
@@ -195,8 +202,19 @@ public class CityEventsFragment extends Fragment {
             vh.mDate.setText(event.getStartDate());
 
             if (event.getImage().size() >= 3) {
-                String imageSrc = event.getImage().get(3).getImgText();
-                Picasso.with(mContext).load(imageSrc).into(vh.mImage);
+                final String imageSrc = event.getImage().get(3).getImgText();
+                final ViewHolder finalVh = vh;
+                if (TextUtils.isEmpty(imageSrc)) {
+                    Picasso.with(mContext).load(R.drawable.nophoto).into(finalVh.mImage);
+                }else{
+                    Picasso.with(mContext)
+                            .load(imageSrc)
+                            .placeholder(R.drawable.nophoto)
+                            .error(R.drawable.nophoto)
+                            .into(vh.mImage);
+                    }
+
+
             }
 
             return view;

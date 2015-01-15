@@ -24,10 +24,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,9 +70,11 @@ public class ArtistInfoFragment extends Fragment {
 
         s = getArguments().getString("artist");
         try {
-            link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + s + "&api_key=" + API_KEY + "&format=json");
-            link2 = new URL("http://www.lastfm.ru/music/" + s + "/+wiki");
+            link = new URL("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + URLEncoder.encode(s, "UTF-8") + "&api_key=" + API_KEY + "&format=json");
+            link2 = new URL("http://www.lastfm.ru/music/" + URLEncoder.encode(s, "UTF-8") + "/+wiki");
         } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 

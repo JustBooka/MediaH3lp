@@ -222,6 +222,8 @@ public class Artist_Events_Fragment extends Fragment {
             if (event.getImage().size() >= 3) {
                 String imageSrc = event.getImage().get(3).getImgText();
                 Picasso.with(mContext).load(imageSrc).into(vh.mImage);
+            } else {
+                Picasso.with(mContext).load(R.drawable.nophoto).into(vh.mImage);
             }
 
             return view;

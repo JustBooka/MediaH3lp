@@ -71,7 +71,7 @@ public class WelcomeActivity extends Activity{
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VKSdk.authorize(VKScope.AUDIO);
+                VKSdk.authorize(VKScope.AUDIO, VKScope.WALL);
             }
         });
     }
