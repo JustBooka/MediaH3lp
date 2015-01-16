@@ -127,7 +127,11 @@ public class AlbumActivity extends Activity {
                 mName.setText(album.getAlbum().getName());
                 mArtist.setText(album.getAlbum().getArtist());
                 mRealeseDate.setText(album.getAlbum().getReleaseDate());
-                mSummary.setText(Html.fromHtml(album.getAlbum().getWiki().getSummary()));
+
+//                if (!TextUtils.isEmpty(album.getAlbum().getWiki().getSummary())){
+//                    mSummary.setText(Html.fromHtml(album.getAlbum().getWiki().getSummary()));
+//                }
+
 
                 if (album.getAlbum().getImage().size() >= 3) {
                     String imageSrc = album.getAlbum().getImage().get(3).getImgText();
