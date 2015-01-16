@@ -3,6 +3,7 @@ package com.help.media.mediah3lp.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,12 +12,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.help.media.mediah3lp.EventActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;
@@ -47,6 +50,7 @@ public class CityEventsFragment extends Fragment {
     private URL link;
     private WeakReference<ParseTask> asyncTaskWeakRef;
     ProgressDialog pd = null;
+    Object object;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_city_events, container, false);
@@ -80,6 +84,16 @@ public class CityEventsFragment extends Fragment {
         super.onAttach(activity);
         this.pd = ProgressDialog.show(this.getActivity(), "",
                 getString(R.string.loading), true, false);
+    }
+
+    private void ItemClick() {
+        Event artist = (Event) object;
+        String name = artist.getId();
+
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                EventActivity.class);
+        intent.putExtra("value", String.valueOf(name));
+        startActivity(intent);
     }
 
     private void startNewAsyncTask() {
@@ -146,13 +160,23 @@ public class CityEventsFragment extends Fragment {
                 EventsResponse title = new Gson().fromJson(strJson, EventsResponse.class);
                 mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getActivity()));
                 pd.dismiss();
+
+                mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getActivity()));
+
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        object = MyAdapter.getItemList(position);
+                        ItemClick();
+                    }
+                });
             }
         }
     }
 
     private static class MyAdapter extends BaseAdapter {
 
-        private List<Event> mList;
+        private static List<Event> mList;
         private Context mContext;
 
         private MyAdapter(List<Event> list, Context context) {
@@ -167,6 +191,10 @@ public class CityEventsFragment extends Fragment {
 
         @Override
         public Event getItem(int position) {
+            return mList.get(position);
+        }
+
+        public static Event getItemList(int position) {
             return mList.get(position);
         }
 
@@ -210,7 +238,6 @@ public class CityEventsFragment extends Fragment {
                     Picasso.with(mContext)
                             .load(imageSrc)
                             .placeholder(R.drawable.nophoto)
-                            .error(R.drawable.nophoto)
                             .into(vh.mImage);
                     }
 

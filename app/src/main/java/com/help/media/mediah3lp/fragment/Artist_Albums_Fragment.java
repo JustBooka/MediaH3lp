@@ -1,6 +1,7 @@
 package com.help.media.mediah3lp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,17 +15,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.help.media.mediah3lp.Audio;
+import com.help.media.mediah3lp.AlbumActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.albums.Album;
-import com.help.media.mediah3lp.models.artist.albums.Albums;
 import com.help.media.mediah3lp.models.artist.albums.AlbumsResponse;
-import com.help.media.mediah3lp.models.topartist.Artist;
 import com.squareup.picasso.Picasso;
-import com.vk.sdk.dialogs.VKShareDialog;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -80,12 +77,24 @@ public class Artist_Albums_Fragment extends Fragment {
         startNewAsyncTask();
     }
 
+    private void ItemClick() {
+        Album a = (Album) object;
+        String artist = a.getmArtist().getName();
+        String album = a.getName();
+
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                AlbumActivity.class);
+        intent.putExtra("artist", String.valueOf(artist));
+        intent.putExtra("album", String.valueOf(album));
+        startActivity(intent);
+    }
+
+
     private void startNewAsyncTask() {
         ParseTask asyncTask = new ParseTask(this);
         this.asyncTaskWeakRef = new WeakReference<ParseTask>(asyncTask);
         asyncTask.execute();
     }
-
 
     public String start() throws Exception {
         URLConnection connection = link.openConnection();
@@ -98,17 +107,17 @@ public class Artist_Albums_Fragment extends Fragment {
     }
 
     public class ParseTask extends AsyncTask<Void, Void, String> {
-
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
+
         String resultJson = "";
 
         private WeakReference<Artist_Albums_Fragment> fragmentWeakRef;
 
+
         public ParseTask(Artist_Albums_Fragment fragment) {
             this.fragmentWeakRef = new WeakReference<Artist_Albums_Fragment>(fragment);
         }
-
 
         @Override
         protected String doInBackground(Void... params) {
@@ -136,7 +145,6 @@ public class Artist_Albums_Fragment extends Fragment {
             }
             return resultJson;
         }
-
         @Override
         protected void onPostExecute(String strJson) {
             super.onPostExecute(strJson);
@@ -155,25 +163,8 @@ public class Artist_Albums_Fragment extends Fragment {
                 }
             });
         }
-    }
 
-    private void ItemClick() {
-        Album album = (Album) object;
-//        String name = user.getArtist();
 
-        new VKShareDialog()
-                .setText("Я слушаю" + album.getName())
-                .setAttachmentLink("Отправлено из MediaHelper", "такие дела")
-                .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-                    @Override
-                    public void onVkShareComplete(int postId) {
-                        Toast.makeText(getActivity(), getString(R.string.msg_send), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onVkShareCancel() {
-                    }
-                }).show(getFragmentManager(), "VK_SHARE_DIALOG");
     }
 
     private static class MyAdapter extends BaseAdapter {
@@ -211,22 +202,29 @@ public class Artist_Albums_Fragment extends Fragment {
                 view = View.inflate(mContext, R.layout.item_album, null);
             }
 
-            ViewHolder vh_albums = (ViewHolder) view.getTag();
-            if (vh_albums == null) {
-                vh_albums = new ViewHolder();
-                vh_albums.mTitle = (TextView) view.findViewById(R.id.title_album);
-                vh_albums.mImage = (ImageView) view.findViewById(R.id.image_album);
-                vh_albums.mArtist = (TextView) view.findViewById(R.id.artist_album);
-                view.setTag(vh_albums);
+            ViewHolder vh = (ViewHolder) view.getTag();
+            if (vh == null) {
+                vh = new ViewHolder();
+                vh.mTitle = (TextView) view.findViewById(R.id.title_album);
+                vh.mImage = (ImageView) view.findViewById(R.id.image_album);
+                vh.mArtist = (TextView) view.findViewById(R.id.artist_album);
+                view.setTag(vh);
             }
 
             Album album = getItem(position);
-            vh_albums.mTitle.setText(album.getName());
-            vh_albums.mArtist.setText(album.getmArtist().getName());
+            vh.mTitle.setText(album.getName());
+            vh.mArtist.setText(album.getmArtist().getName());
 
             if (album.getImage().size() >= 3) {
                 String imageSrc = album.getImage().get(3).getImgText();
-                Picasso.with(mContext).load(imageSrc).into(vh_albums.mImage);
+                if (TextUtils.isEmpty(imageSrc)) {
+                    Picasso.with(mContext).load(R.drawable.nophoto).into(vh.mImage);
+                }else{
+                    Picasso.with(mContext)
+                            .load(imageSrc)
+                            .placeholder(R.drawable.nophoto)
+                            .into(vh.mImage);
+                }
             }
 
             return view;

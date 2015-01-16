@@ -1,7 +1,6 @@
 package com.help.media.mediah3lp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -84,11 +83,7 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
         VKUIHelper.onDestroy(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,9 +148,10 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
         final int PAGE_COUNT = 3;
         private String tabTitles[] = new String[]{
+
                 getString(R.string.btn_info),
                 getString(R.string.btn_events),
-                getString(R.string.btn_albums)
+                getString(R.string.btn_albums),
         };
         Context context;
 
@@ -208,8 +204,10 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
 
 //public class MenuActivity extends Activity implements View.OnClickListener {

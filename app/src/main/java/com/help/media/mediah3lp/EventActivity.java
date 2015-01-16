@@ -2,21 +2,15 @@ package com.help.media.mediah3lp;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.help.media.mediah3lp.models.artist.event.EventResponse;
-import com.help.media.mediah3lp.models.artist.events.Event;
-import com.help.media.mediah3lp.models.artist.events.EventsResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
@@ -27,7 +21,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * Created by User on 15.01.2015.
@@ -38,13 +31,49 @@ public class EventActivity  extends Activity{
     ProgressDialog pd = null;
     public String s;
     private URL link;
-    private ListView mListView;
+
+    private TextView mTitle;
+    private ImageView mImage;
+    private TextView mCountry;
+    private TextView  mCity;
+    private TextView mClub;
+    private TextView  mDate;
+    private TextView  mPhoneNumber;
+    private TextView mStreet;
+    private TextView mWebSite;
+
+
+//    private TextView mTitle = (TextView) findViewById(R.id.tv_title);
+//    private ImageView mImage = (ImageView) findViewById(R.id.iv_event);
+//    private TextView mCountry = (TextView) findViewById(R.id.tv_country);
+//    private TextView  mCity = (TextView) findViewById(R.id.tv_city);
+//    private TextView mClub = (TextView) findViewById(R.id.tv_name);
+//    private TextView  mDate = (TextView) findViewById(R.id.tv_startDate);
+//    private TextView  mPhoneNumber = (TextView) findViewById(R.id.tv_phonenumber);
+//    private TextView mStreet = (TextView) findViewById(R.id.tv_street);
+//    private TextView mWebSite = (TextView) findViewById(R.id.tv_website);
+
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_layout);
-        mListView = (ListView) findViewById(R.id.lv_event);
+        setContentView(R.layout.event);
+//        mListView = (ListView) findViewById(R.id.lv_event);
+
+     mTitle = (TextView) findViewById(R.id.tv_event_title);
+     mImage = (ImageView) findViewById(R.id.iv_event_image);
+     mCountry = (TextView) findViewById(R.id.tv_event_country);
+     mCity = (TextView) findViewById(R.id.tv_event_city);
+     mClub = (TextView) findViewById(R.id.tv_event_name);
+     mDate = (TextView) findViewById(R.id.tv_event_startDate);
+     mPhoneNumber = (TextView) findViewById(R.id.tv_event_phonenumber);
+     mStreet = (TextView) findViewById(R.id.tv_event_street);
+     mWebSite = (TextView) findViewById(R.id.tv_event_website);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -105,89 +134,112 @@ public class EventActivity  extends Activity{
             super.onPostExecute(strJson);
 
             if (!TextUtils.isEmpty(strJson)) {
-                EventsResponse title = new Gson().fromJson(strJson, EventsResponse.class);
+                EventResponse title = new Gson().fromJson(strJson, EventResponse.class);
+
+
+
+
+                mTitle.setText(title.getEvent().getTitle());
+                mCountry.setText(title.getEvent().getVenue().getLocation().getCountry() + ", ");
+                mCity.setText(title.getEvent().getVenue().getLocation().getCity());
+                mClub.setText(title.getEvent().getVenue().getName());
+                mDate.setText(title.getEvent().getStartDate());
+                mPhoneNumber.setText(title.getEvent().getVenue().getPhonenumber());
+                mWebSite.setText(title.getEvent().getWebSite());
+                mStreet.setText(title.getEvent().getVenue().getLocation().getStreet());
+
+                if (title.getEvent().getImage().size() >= 3) {
+                    String imageSrc = title.getEvent().getImage().get(3).getImgText();
+                    if (TextUtils.isEmpty(imageSrc)) {
+                        Picasso.with(getApplicationContext()).load(R.drawable.nophoto).into(mImage);
+                    }else{
+                        Picasso.with(getApplicationContext())
+                                .load(imageSrc)
+                                .placeholder(R.drawable.nophoto)
+                                .into(mImage);
+                    }
+                }
                 pd.dismiss();
-                mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getApplicationContext()));
             }
         }
     }
 
-    private static class MyAdapter extends BaseAdapter {
-
-        private List<Event> mList;
-        private Context mContext;
-        private MyAdapter(List<Event> list, Context context) {
-            mList = list;
-            mContext = context;
-        }
-
-        @Override
-        public int getCount() {
-            return mList.size();
-        }
-
-        @Override
-        public Event getItem(int position) {
-            return mList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            if (view == null) {
-                view = View.inflate(mContext, R.layout.artist_event, null);
-            }
-
-            ViewHolder vh = (ViewHolder) view.getTag();
-            if (vh == null) {
-                vh = new ViewHolder();
-                vh.mTitle = (TextView) view.findViewById(R.id.tv_title);
-                vh.mImage = (ImageView) view.findViewById(R.id.iv_event);
-                vh.mCountry = (TextView) view.findViewById(R.id.tv_country);
-                vh.mCity = (TextView) view.findViewById(R.id.tv_city);
-                vh.mClub = (TextView) view.findViewById(R.id.tv_name);
-                vh.mDate = (TextView) view.findViewById(R.id.tv_startDate);
-                vh.mPhoneNumber = (TextView) view.findViewById(R.id.tv_phonenumber);
-//                vh.mWebSite = (TextView) view.findViewById(R.id.tv_website);
-                vh.mStreet = (TextView) view.findViewById(R.id.tv_street);
-
-                view.setTag(vh);
-            }
-
-            Event event = getItem(position);
-            vh.mTitle.setText(event.getTitle());
-            vh.mCountry.setText(event.getVenue().getLocation().getCountry() + ", ");
-            vh.mCity.setText(event.getVenue().getLocation().getCity());
-            vh.mClub.setText(event.getVenue().getName());
-            vh.mDate.setText(event.getStartDate());
-            vh.mPhoneNumber.setText(event.getVenue().getPhonenumber());
-//            vh.mWebSite.setText(event.getWebSite());
-            vh.mStreet.setText(event.getVenue().getLocation().getStreet());
-
-            if (event.getImage().size() >= 3) {
-                String imageSrc = event.getImage().get(3).getImgText();
-                Picasso.with(mContext).load(imageSrc).into(vh.mImage);
-            }
-
-            return view;
-        }
-
-        private static class ViewHolder {
-            private TextView mTitle;
-            private ImageView mImage;
-            private TextView mCountry;
-            private TextView mCity;
-            private TextView mClub;
-            private TextView mDate;
-            private TextView mPhoneNumber;
-            private TextView mStreet;
-            private TextView mWebSite;
-
-        }
-    }
+//    private static class MyAdapter extends BaseAdapter {
+//
+//        private List<Event> mList;
+//        private Context mContext;
+//        private MyAdapter(List<Event> list, Context context) {
+//            mList = list;
+//            mContext = context;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mList.size();
+//        }
+//
+//        @Override
+//        public Event getItem(int position) {
+//            return mList.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View view, ViewGroup parent) {
+//            if (view == null) {
+//                view = View.inflate(mContext, R.layout.current_event, null);
+//            }
+//
+//            ViewHolder vh = (ViewHolder) view.getTag();
+//            if (vh == null) {
+//                vh = new ViewHolder();
+//                vh.mTitle = (TextView) view.findViewById(R.id.tv_title);
+//                vh.mImage = (ImageView) view.findViewById(R.id.iv_event);
+//                vh.mCountry = (TextView) view.findViewById(R.id.tv_country);
+//                vh.mCity = (TextView) view.findViewById(R.id.tv_city);
+//                vh.mClub = (TextView) view.findViewById(R.id.tv_name);
+//                vh.mDate = (TextView) view.findViewById(R.id.tv_startDate);
+//                vh.mPhoneNumber = (TextView) view.findViewById(R.id.tv_phonenumber);
+////                vh.mWebSite = (TextView) view.findViewById(R.id.tv_website);
+//                vh.mStreet = (TextView) view.findViewById(R.id.tv_street);
+//
+//                view.setTag(vh);
+//            }
+//
+//            Event event = getItem(position);
+//            vh.mTitle.setText(event.getTitle());
+//            vh.mCountry.setText(event.getVenue().getLocation().getCountry() + ", ");
+//            vh.mCity.setText(event.getVenue().getLocation().getCity());
+//            vh.mClub.setText(event.getVenue().getName());
+//            vh.mDate.setText(event.getStartDate());
+//            vh.mPhoneNumber.setText(event.getVenue().getPhonenumber());
+////            vh.mWebSite.setText(event.getWebSite());
+//            vh.mStreet.setText(event.getVenue().getLocation().getStreet());
+//
+//            if (event.getImage().size() >= 3) {
+//                String imageSrc = event.getImage().get(3).getImgText();
+//                Picasso.with(mContext).load(imageSrc).into(vh.mImage);
+//            }
+//
+//            return view;
+//        }
+//
+//        private static class ViewHolder {
+//            private TextView mTitle;
+//            private ImageView mImage;
+//            private TextView mCountry;
+//            private TextView mCity;
+//            private TextView mClub;
+//            private TextView mDate;
+//            private TextView mPhoneNumber;
+//            private TextView mStreet;
+//            private TextView mWebSite;
+//
+//        }
+//    }
 }
 

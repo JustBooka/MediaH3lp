@@ -200,6 +200,10 @@ public class ArtistInfoFragment extends Fragment {
                 WebView mWebView = (WebView) getView().findViewById(R.id.fr_artist_info);
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
                 pd.dismiss();
+            } else {
+                pd.dismiss();
+                Toast.makeText(getActivity(), R.string.loading_error, Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
             }
 
 
