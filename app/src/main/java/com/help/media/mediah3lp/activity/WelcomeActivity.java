@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.help.media.mediah3lp.R;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -80,7 +81,7 @@ public class WelcomeActivity extends Activity{
     public void onResume() {
         super.onResume();
         if (VKSdk.wakeUpSession()) {
-            Intent intent = new Intent(this, ArtistActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }else {
             loginButton.setVisibility(View.VISIBLE);

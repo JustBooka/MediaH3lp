@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.models.artist.info;
 
 import com.google.gson.annotations.SerializedName;
 

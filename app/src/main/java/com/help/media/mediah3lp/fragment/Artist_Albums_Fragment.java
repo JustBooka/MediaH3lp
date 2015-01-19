@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.help.media.mediah3lp.AlbumActivity;
+import com.help.media.mediah3lp.activity.AlbumActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.albums.Album;
 import com.help.media.mediah3lp.models.artist.albums.AlbumsResponse;

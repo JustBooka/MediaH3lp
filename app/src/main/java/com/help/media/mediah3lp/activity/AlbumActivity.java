@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.album.AlbumResponse;
 import com.help.media.mediah3lp.models.artist.album.Track;
 import com.help.media.mediah3lp.models.artist.album.Tracks;

@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.help.media.mediah3lp.ArtistResponse;
+import com.help.media.mediah3lp.models.artist.info.ArtistResponse;
 import com.help.media.mediah3lp.R;
 
 import org.apache.http.HttpResponse;

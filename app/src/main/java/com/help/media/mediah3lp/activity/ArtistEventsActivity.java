@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+
+import com.help.media.mediah3lp.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -22,28 +25,29 @@ import java.util.regex.Pattern;
 /**
  * Created by User on 30.12.2014.
  */
-public class ArtistAlbumsActivity extends Activity {
+public class ArtistEventsActivity extends Activity {
+
+    public static final String API_KEY = "fd81bf1ff00cb86975d831785b3606a9";
 
     private URL link;
     private WebView mWebView;
     ProgressDialog pd = null;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.artist_albums_layout);
-        mWebView = (WebView) findViewById(R.id.artist_albums);
+        setContentView(R.layout.artist_events_layout);
+        mWebView = (WebView) findViewById(R.id.artist_events);
         this.pd = ProgressDialog.show(this, "",
                 getString(R.string.loading), true, false);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String s = extras.getString("value");
-//            TextView view = (TextView) findViewById(R.id.artist_name);
- //           view.setText(s);
+            TextView view = (TextView) findViewById(R.id.artist_name);
+            view.setText(s);
 
             try {
-                link = new URL("http://www.lastfm.ru/music/" + s + "/+albums?order=date");
+                link = new URL("http://www.lastfm.ru/music/" + s + "/+events");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -55,6 +59,9 @@ public class ArtistAlbumsActivity extends Activity {
                 return true;
             }
         });
+
+
+
     }
 
     @Override
@@ -92,15 +99,16 @@ public class ArtistAlbumsActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            Pattern p = Pattern.compile("<ul class=\"albums  r album-list album-list--compact\" nthchildren=\"1\">(.*?)</ul>");
+            Pattern p = Pattern.compile("<table class=\"eventsMedium\">(.*?)</table>");
             Matcher m = p.matcher(result);
 
             if (m.find()) {
 
                 mWebView.loadData(m.group(1), "text/html; charset=UTF-8", null);
-                ArtistAlbumsActivity.this.pd.dismiss();
+                ArtistEventsActivity.this.pd.dismiss();
             }
 
         }
     }
+
 }

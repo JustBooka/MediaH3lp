@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.help.media.mediah3lp.models.artist.info.ArtistResponse;
+import com.help.media.mediah3lp.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;

@@ -19,12 +19,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.help.media.mediah3lp.EventActivity;
+import com.help.media.mediah3lp.activity.EventActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Request;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -37,8 +36,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.List;
-
-import javax.security.auth.callback.Callback;
 
 /**
  * Created by alexey.bukin on 13.01.2015.

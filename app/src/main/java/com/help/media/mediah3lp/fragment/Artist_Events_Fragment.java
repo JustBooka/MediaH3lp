@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.help.media.mediah3lp.EventActivity;
+import com.help.media.mediah3lp.activity.EventActivity;
 import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.models.artist.events.Event;
 import com.help.media.mediah3lp.models.artist.events.EventsResponse;

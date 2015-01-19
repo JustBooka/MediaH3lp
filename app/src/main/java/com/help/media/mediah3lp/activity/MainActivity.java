@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,13 +19,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.fragment.ArtisListFragment;
 import com.help.media.mediah3lp.fragment.CityEventsFragment;
 import com.help.media.mediah3lp.fragment.TopArtistsFragment;
 import com.vk.sdk.VKUIHelper;
 
 
-public class ArtistActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOG_TAG = "TAG";
     private ActionBarDrawerToggle toggle;

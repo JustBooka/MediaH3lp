@@ -1,4 +1,4 @@
-package com.help.media.mediah3lp;
+package com.help.media.mediah3lp.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.help.media.mediah3lp.R;
 import com.help.media.mediah3lp.fragment.ArtistInfoFragment;
 import com.help.media.mediah3lp.fragment.Artist_Albums_Fragment;
 import com.help.media.mediah3lp.fragment.Artist_Events_Fragment;

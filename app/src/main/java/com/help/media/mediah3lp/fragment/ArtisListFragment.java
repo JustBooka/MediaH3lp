@@ -15,10 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.help.media.mediah3lp.ArtistActivity;
-import com.help.media.mediah3lp.ArtistCardActivity;
-import com.help.media.mediah3lp.Audio;
-import com.help.media.mediah3lp.MenuActivity;
+import com.help.media.mediah3lp.models.artist.info.Audio;
+import com.help.media.mediah3lp.activity.MenuActivity;
 import com.help.media.mediah3lp.R;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
