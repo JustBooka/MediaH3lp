@@ -35,64 +35,21 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
     ViewPagerAdapter adapter;
     public String s;
 
-    private static final String VK_APP_ID = "4675654";
-
-    //           currentRequest = new com.vk.sdk.api.methods.VKApiAudio().get(new VKParameters());
-    private final VKSdkListener sdkListener = new VKSdkListener() {
-
-        @Override
-        public void onAcceptUserToken(VKAccessToken token) {
-            Log.d("MediaHLPR", "onAcceptUserToken " + token);
-        }
-
-        @Override
-        public void onReceiveNewToken(VKAccessToken newToken) {
-            Log.d("MediaHLPR", "onReceiveNewToken " + newToken);
-        }
-
-        @Override
-        public void onRenewAccessToken(VKAccessToken token) {
-            Log.d("MediaHLPR", "onRenewAccessToken " + token);
-        }
-
-        @Override
-        public void onCaptchaError(VKError captchaError) {
-            Log.d("MediaHLPR", "onCaptchaError " + captchaError);
-        }
-
-        @Override
-        public void onTokenExpired(VKAccessToken expiredToken) {
-            Log.d("MediaHLPR", "onTokenExpired " + expiredToken);
-        }
-
-        @Override
-        public void onAccessDenied(VKError authorizationError) {
-            Log.d("MediaHLPR", "onAccessDenied " + authorizationError);
-        }
-
-    };
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        VKUIHelper.onResume(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        VKUIHelper.onDestroy(this);
     }
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
-
-        VKSdk.initialize(sdkListener, VK_APP_ID);
-        VKUIHelper.onCreate(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -205,10 +162,6 @@ public class MenuActivity extends ActionBarActivity implements MaterialTabListen
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 }
 
 //public class MenuActivity extends Activity implements View.OnClickListener {

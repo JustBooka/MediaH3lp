@@ -213,7 +213,7 @@ public class CityEventsFragment extends Fragment {
                 vh.mImage = (ImageView) view.findViewById(R.id.image);
                 vh.mCountry = (TextView) view.findViewById(R.id.country);
                 vh.mCity = (TextView) view.findViewById(R.id.city);
-                vh.mClub = (TextView) view.findViewById(R.id.name);
+//                vh.mClub = (TextView) view.findViewById(R.id.name);
                 vh.mDate = (TextView) view.findViewById(R.id.startDate);
 
                 view.setTag(vh);
@@ -223,7 +223,7 @@ public class CityEventsFragment extends Fragment {
             vh.mTitle.setText(event.getTitle());
             vh.mCountry.setText(event.getVenue().getLocation().getCountry() + ", ");
             vh.mCity.setText(event.getVenue().getLocation().getCity());
-            vh.mClub.setText(event.getVenue().getName());
+//            vh.mClub.setText(event.getVenue().getName());
             vh.mDate.setText(event.getStartDate());
 
             if (event.getImage().size() >= 3) {
@@ -249,7 +249,7 @@ public class CityEventsFragment extends Fragment {
             private ImageView mImage;
             private TextView mCountry;
             private TextView mCity;
-            private TextView mClub;
+//            private TextView mClub;
             private TextView mDate;
         }
     }

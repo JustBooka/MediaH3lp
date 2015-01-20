@@ -2,6 +2,7 @@ package com.help.media.mediah3lp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -98,7 +99,7 @@ public class ArtisListFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listAdapter = new ArrayAdapter<Audio>(this.getActivity(), android.R.layout.simple_list_item_2, android.R.id.text1, users) {
+        listAdapter = new ArrayAdapter<Audio>(this.getActivity(), R.layout.artists_list_item, android.R.id.text1, users) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 

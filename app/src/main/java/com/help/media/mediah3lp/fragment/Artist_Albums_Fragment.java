@@ -49,8 +49,8 @@ public class Artist_Albums_Fragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_albums, container, false);
-
         mListView = (ListView) view.findViewById(R.id.albums_list);
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
         return view;
     }
 
@@ -151,20 +151,17 @@ public class Artist_Albums_Fragment extends Fragment {
 
             if (!TextUtils.isEmpty(strJson)) {
                 AlbumsResponse albums = new Gson().fromJson(strJson, AlbumsResponse.class);
-
                 mListView.setAdapter(new MyAdapter(albums.getTopAlbums().getAlbum(), getActivity()));
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        object = MyAdapter.getItemList(position);
+                        ItemClick();
+
+                    }
+                });
             }
-
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    object = MyAdapter.getItemList(position);
-                    ItemClick();
-                }
-            });
         }
-
-
     }
 
     private static class MyAdapter extends BaseAdapter {

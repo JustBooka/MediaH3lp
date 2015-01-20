@@ -196,7 +196,7 @@ public class TopArtistsFragment extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null) {
-                view = View.inflate(mContext, R.layout.item_top_artist, null);
+                view = View.inflate(mContext, R.layout.top_artist, null);
             }
 
             ViewHolder vh = (ViewHolder) view.getTag();

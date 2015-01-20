@@ -47,7 +47,7 @@ public class AlbumActivity extends Activity {
     private ImageView mImage;
     private TextView mArtist;
     private TextView mRealeseDate;
-    private TextView mSummary;
+//    private TextView mSummary;
     private ListView mListView;
 
 
@@ -60,7 +60,7 @@ public class AlbumActivity extends Activity {
         mImage = (ImageView) findViewById(R.id.iv_album_image);
         mArtist = (TextView) findViewById(R.id.tv_album_artist);
         mRealeseDate = (TextView) findViewById(R.id.tv_album_releacedate);
-        mSummary = (TextView)  findViewById(R.id.tv_album_summary);
+//        mSummary = (TextView)  findViewById(R.id.tv_album_summary);
         mListView = (ListView) findViewById(R.id.lv_album_tracks);
 
         Bundle extras = getIntent().getExtras();

@@ -49,8 +49,8 @@ public class Artist_Events_Fragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fr_events, container, false);
-
         mListView = (ListView) view.findViewById(R.id.list);
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
         return view;
     }
 
@@ -151,9 +151,7 @@ public class Artist_Events_Fragment extends Fragment {
 
             if (!TextUtils.isEmpty(strJson)) {
                 EventsResponse title = new Gson().fromJson(strJson, EventsResponse.class);
-
                  mListView.setAdapter(new MyAdapter(title.getEvents().getEvent(), getActivity()));
-
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -207,7 +205,7 @@ public class Artist_Events_Fragment extends Fragment {
                 vh.mImage = (ImageView) view.findViewById(R.id.image);
                 vh.mCountry = (TextView) view.findViewById(R.id.country);
                 vh.mCity = (TextView) view.findViewById(R.id.city);
-                vh.mClub = (TextView) view.findViewById(R.id.name);
+//                vh.mClub = (TextView) view.findViewById(R.id.name);
                 vh.mDate = (TextView) view.findViewById(R.id.startDate);
 
                 view.setTag(vh);
@@ -217,7 +215,7 @@ public class Artist_Events_Fragment extends Fragment {
             vh.mTitle.setText(event.getTitle());
             vh.mCountry.setText(event.getVenue().getLocation().getCountry() + ", ");
             vh.mCity.setText(event.getVenue().getLocation().getCity());
-            vh.mClub.setText(event.getVenue().getName());
+//            vh.mClub.setText(event.getVenue().getName());
             vh.mDate.setText(event.getStartDate());
 
             if (event.getImage().size() >= 3) {
@@ -241,7 +239,7 @@ public class Artist_Events_Fragment extends Fragment {
             private ImageView mImage;
             private TextView mCountry;
             private TextView mCity;
-            private TextView mClub;
+//            private TextView mClub;
             private TextView mDate;
         }
     }

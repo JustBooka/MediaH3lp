@@ -5,24 +5,48 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#009688" />
+        android:background="#10000000">
 
-        <ImageView
-            android:id="@+id/iv_event_image"
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/iv_event_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            tools:ignore="ContentDescription"
-            android:layout_gravity="left"/>
-
-        <TextView
-            android:id="@+id/tv_event_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:background="@android:color/black"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
+            <TextView
+                android:id="@+id/tv_event_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.help.media.mediah3lp.models.artist.info.ArtistResponse;
 import com.help.media.mediah3lp.R;
+import com.help.media.mediah3lp.view.ObservableScrollView;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -55,6 +58,16 @@ public class ArtistInfoFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     public void parseWebPage() {
         super.onResume();
         DownloadWebPageTask task = new DownloadWebPageTask();
@@ -88,7 +101,6 @@ public class ArtistInfoFragment extends Fragment {
         this.asyncTaskWeakRef = new WeakReference<ParseTask>(asyncTask);
         asyncTask.execute();
     }
-
 
     public class ParseTask extends AsyncTask<Void, Void, String> {
 
