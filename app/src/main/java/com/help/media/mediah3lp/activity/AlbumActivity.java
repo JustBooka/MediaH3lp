@@ -127,8 +127,13 @@ public class AlbumActivity extends Activity {
 
                 mName.setText(album.getAlbum().getName());
                 mArtist.setText(album.getAlbum().getArtist());
-                mRealeseDate.setText(album.getAlbum().getReleaseDate());
-
+                    String mDate=album.getAlbum().getReleaseDate();
+                    String x=mDate.replaceAll("\\p{Z}","");
+                if (!TextUtils.isEmpty(x)) {
+                    mRealeseDate.setText(x);
+                }else{
+                    mRealeseDate.setVisibility(View.GONE);
+                }
 //                if (!TextUtils.isEmpty(album.getAlbum().getWiki().getSummary())){
 //                    mSummary.setText(Html.fromHtml(album.getAlbum().getWiki().getSummary()));
 //                }

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -144,7 +145,13 @@ public class EventActivity  extends Activity{
                 mCountry.setText(title.getEvent().getVenue().getLocation().getCountry() + ", ");
                 mCity.setText(title.getEvent().getVenue().getLocation().getCity());
                 mClub.setText(title.getEvent().getVenue().getName());
-                mDate.setText(title.getEvent().getStartDate());
+                String y=title.getEvent().getStartDate();
+                String x=y.replaceAll("\\p{Z}","");
+                if (!TextUtils.isEmpty(x)) {
+                    mDate.setText(x);
+                }else{
+                    mDate.setVisibility(View.GONE);
+                }
                 mPhoneNumber.setText(title.getEvent().getVenue().getPhonenumber());
                 mWebSite.setText(title.getEvent().getWebSite());
                 mStreet.setText(title.getEvent().getVenue().getLocation().getStreet());
